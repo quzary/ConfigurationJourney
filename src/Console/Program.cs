@@ -1,6 +1,8 @@
-﻿using Lodgify.AppSettings.ConfigSection;
-using Lodgify.Configuration.Contracts;
+﻿using System.Collections.Generic;
+using Lodgify.AppSettings;
 using Messaging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Console
 {
@@ -8,28 +10,26 @@ namespace Console
     {
         static void Main(string[] args)
         {
-            var configurationManagerWrapper = new ConfigurationManagerWrapper();
-            var appSettingsProvider = new AppSettingsProvider(configurationManagerWrapper);
-            var messagingSettingsProvider = new MessagingSettingsProvider(appSettingsProvider);
-            var rabbitMqPublisherFactory = new RabbitMqPublisherFactory(messagingSettingsProvider);
+            var configurationRoot = new ConfigurationBuilder()
+                .AddAppSettingsConfiguration()
+                .Build();
 
+            var configurationSection = configurationRoot.GetSection("config:messaging");
+
+            var configureFromConfigurationOptions = new ConfigureFromConfigurationOptions<MessagingSettings>(configurationSection);
+            var setups = new List<IConfigureOptions<MessagingSettings>> { configureFromConfigurationOptions };
+
+            var postConfigureOptions = new PostConfigureOptions<MessagingSettings>(Options.DefaultName, settings => { });
+            var postConfigures = new List<IPostConfigureOptions<MessagingSettings>> { postConfigureOptions };
+
+            var optionsFactory = new OptionsFactory<MessagingSettings>(setups, postConfigures);
+
+            var optionsManager = new OptionsManager<MessagingSettings>(optionsFactory);
+
+            var rabbitMqPublisherFactory = new RabbitMqPublisherFactory(optionsManager);
             rabbitMqPublisherFactory.Create();
 
             System.Console.ReadKey();
         }
-    }
-
-    internal class MessagingSettingsProvider : IMessagingSettings
-    {
-        private readonly ISettingsProvider _settingsProvider;
-
-        public MessagingSettingsProvider(ISettingsProvider settingsProvider)
-        {
-            _settingsProvider = settingsProvider;
-        }
-
-        public string ConnectionString => _settingsProvider.Get<string>("RabbitConnectionString");
-
-        public string ErrorQueueName => _settingsProvider.Get<string>("ErrorQueueName");
     }
 }

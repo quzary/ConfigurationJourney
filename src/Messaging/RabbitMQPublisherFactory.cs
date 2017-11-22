@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 
 namespace Messaging
 {
@@ -7,20 +8,20 @@ namespace Messaging
         object Create();
     }
 
-    public interface IMessagingSettings
+    public class MessagingSettings
     {
-        string ConnectionString { get; }
+        public string ConnectionString { get; set; }
 
-        string ErrorQueueName { get; }
+        public string ErrorQueueName { get; set; }
     }
 
     public class RabbitMqPublisherFactory : IBusPublisherFactory
     {
-        private readonly IMessagingSettings _messagingSettings;
+        private readonly MessagingSettings _messagingSettings;
 
-        public RabbitMqPublisherFactory(IMessagingSettings messagingSettings)
+        public RabbitMqPublisherFactory(IOptions<MessagingSettings> messagingSettings)
         {
-            _messagingSettings = messagingSettings;
+            _messagingSettings = messagingSettings.Value;
         }
 
         public object Create()
