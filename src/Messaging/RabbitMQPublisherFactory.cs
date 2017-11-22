@@ -1,5 +1,4 @@
 ﻿using System;
-using Lodgify.Configuration.Contracts;
 
 namespace Messaging
 {
@@ -8,23 +7,30 @@ namespace Messaging
         object Create();
     }
 
+    public interface IMessagingSettings
+    {
+        string ConnectionString { get; }
+
+        string ErrorQueueName { get; }
+    }
+
     public class RabbitMqPublisherFactory : IBusPublisherFactory
     {
-        private readonly ISettingsProvider _settingsProvider;
+        private readonly IMessagingSettings _messagingSettings;
 
-        public RabbitMqPublisherFactory(ISettingsProvider settingsProvider)
+        public RabbitMqPublisherFactory(IMessagingSettings messagingSettings)
         {
-            _settingsProvider = settingsProvider;
+            _messagingSettings = messagingSettings;
         }
 
         public object Create()
         {
             Console.WriteLine("Creating a bus publisher for RabbitMQ");
 
-            var connectionString = _settingsProvider.Get<string>("RabbitConnectionString");
+            var connectionString = _messagingSettings.ConnectionString;
             Console.WriteLine($"Using connection string: {connectionString}");
 
-            var errorQueueName = _settingsProvider.Get<string>("ErrorQueueName");
+            var errorQueueName = _messagingSettings.ErrorQueueName;
             Console.WriteLine($"Using error queue name: {errorQueueName}");
 
             return null;
