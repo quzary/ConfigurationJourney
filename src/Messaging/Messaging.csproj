@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lodgify.Configuration.Contracts, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lodgify.Configuration.Contracts.1.1.0-rc2\lib\net47\Lodgify.Configuration.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,6 +45,9 @@
   <ItemGroup>
     <Compile Include="RabbitMQPublisherFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

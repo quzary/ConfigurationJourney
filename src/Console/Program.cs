@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+﻿using Lodgify.AppSettings.ConfigSection;
 using Messaging;
 
 namespace Console
@@ -7,10 +7,9 @@ namespace Console
     {
         static void Main(string[] args)
         {
-            var connectionString = ConfigurationManager.AppSettings["RabbitConnectionString"];
+            var rabbitMqPublisherFactory = new RabbitMqPublisherFactory(new AppSettingsProvider(new ConfigurationManagerWrapper()));
 
-            var rabbitMqPublisherFactory = new RabbitMqPublisherFactory();
-            rabbitMqPublisherFactory.Create(connectionString);
+            rabbitMqPublisherFactory.Create();
 
             System.Console.ReadKey();
         }
