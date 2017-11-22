@@ -1,4 +1,5 @@
-﻿using Messaging;
+﻿using System.Configuration;
+using Messaging;
 
 namespace Console
 {
@@ -6,8 +7,10 @@ namespace Console
     {
         static void Main(string[] args)
         {
+            var connectionString = ConfigurationManager.AppSettings["RabbitConnectionString"];
+
             var rabbitMqPublisherFactory = new RabbitMqPublisherFactory();
-            rabbitMqPublisherFactory.Create();
+            rabbitMqPublisherFactory.Create(connectionString);
 
             System.Console.ReadKey();
         }

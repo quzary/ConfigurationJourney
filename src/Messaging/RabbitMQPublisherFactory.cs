@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Configuration;
 
 namespace Messaging
 {
     public interface IBusPublisherFactory
     {
-        object Create();
+        object Create(string connectionString);
     }
 
     public class RabbitMqPublisherFactory : IBusPublisherFactory
     {
-        public object Create()
+        public object Create(string connectionString)
         {
             Console.WriteLine("Creating a bus publisher for RabbitMQ");
 
-            var connectionString = ConfigurationManager.AppSettings["RabbitConnectionString"];
             Console.WriteLine($"Using connection string: {connectionString}");
             
             return null;
