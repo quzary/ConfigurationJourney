@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using Lodgify.AppSettings;
 using Lodgify.Ioc.Autofac.Options;
 using Messaging;
@@ -12,6 +13,12 @@ namespace Console
         {
             var configurationRoot = new ConfigurationBuilder()
                 .AddAppSettingsConfiguration()
+                .AddInMemoryCollection(
+                    new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("config:messaging:errorQueueName", "__Lodgify_INMEMORY_Errors")
+                    }
+                )
                 .Build();
 
             var builder = new ContainerBuilder();
