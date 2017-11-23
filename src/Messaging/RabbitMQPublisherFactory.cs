@@ -17,7 +17,7 @@ namespace Messaging
 
         public string ErrorQueueName { get; set; }
 
-        public RetryPolicySettings RetryPolicySettings { get; set; }
+        public RetryPolicySettings RetryPolicy { get; set; }
     }
 
     public class RetryPolicySettings

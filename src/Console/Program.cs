@@ -37,7 +37,6 @@ namespace Console
                 var builder = new ContainerBuilder();
 
                 builder.ConfigureOptions<MessageBusSettings>(configurationRoot);
-                builder.ConfigureOptions<RetryPolicySettings>(configurationRoot);
 
                 builder
                     .RegisterType<RabbitMqPublisherFactory>()
