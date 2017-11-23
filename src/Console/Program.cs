@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Autofac;
 using Lodgify.AppSettings;
+using Lodgify.Ioc.Autofac.Options;
 using Messaging;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace Console
 {
@@ -16,17 +16,17 @@ namespace Console
 
             var configurationSection = configurationRoot.GetSection("config:messaging");
 
-            var configureFromConfigurationOptions = new ConfigureFromConfigurationOptions<MessagingSettings>(configurationSection);
-            var setups = new List<IConfigureOptions<MessagingSettings>> { configureFromConfigurationOptions };
+            var builder = new ContainerBuilder();
 
-            var postConfigureOptions = new PostConfigureOptions<MessagingSettings>(Options.DefaultName, settings => { });
-            var postConfigures = new List<IPostConfigureOptions<MessagingSettings>> { postConfigureOptions };
+            builder.ConfigureOptions<MessagingSettings>(configurationSection);
 
-            var optionsFactory = new OptionsFactory<MessagingSettings>(setups, postConfigures);
+            builder
+                .RegisterType<RabbitMqPublisherFactory>()
+                .As<IBusPublisherFactory>();
 
-            var optionsManager = new OptionsManager<MessagingSettings>(optionsFactory);
+            var container = builder.Build();
 
-            var rabbitMqPublisherFactory = new RabbitMqPublisherFactory(optionsManager);
+            var rabbitMqPublisherFactory = container.Resolve<IBusPublisherFactory>();
             rabbitMqPublisherFactory.Create();
 
             System.Console.ReadKey();
