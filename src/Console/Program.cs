@@ -14,11 +14,9 @@ namespace Console
                 .AddAppSettingsConfiguration()
                 .Build();
 
-            var configurationSection = configurationRoot.GetSection("config:messaging");
-
             var builder = new ContainerBuilder();
 
-            builder.ConfigureOptions<MessagingSettings>(configurationSection);
+            builder.ConfigureOptions<MessagingSettings>(configurationRoot);
 
             builder
                 .RegisterType<RabbitMqPublisherFactory>()

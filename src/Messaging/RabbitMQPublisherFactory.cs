@@ -1,4 +1,5 @@
 ﻿using System;
+using Lodgify.Configuration.Contracts;
 using Microsoft.Extensions.Options;
 
 namespace Messaging
@@ -8,6 +9,7 @@ namespace Messaging
         object Create();
     }
 
+    [Configuration("config:messaging", ':')]
     public class MessagingSettings
     {
         public string ConnectionString { get; set; }
