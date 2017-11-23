@@ -16,9 +16,10 @@ namespace Messaging
         public string ConnectionString { get; set; }
 
         public string ErrorQueueName { get; set; }
+
+        public RetryPolicySettings RetryPolicySettings { get; set; }
     }
 
-    [Configuration("messageBus/retryPolicy")]
     public class RetryPolicySettings
     {
         public int MaxRetries { get; set; }
@@ -32,12 +33,9 @@ namespace Messaging
     {
         private readonly MessageBusSettings _messagingSettings;
 
-        private readonly RetryPolicySettings _retryPoliciesSettings;
-
-        public RabbitMqPublisherFactory(IOptions<MessageBusSettings> messageBusSettings, IOptions<RetryPolicySettings> retryPoliciesSettings)
+        public RabbitMqPublisherFactory(IOptions<MessageBusSettings> messageBusSettings)
         {
             _messagingSettings = messageBusSettings.Value;
-            _retryPoliciesSettings = retryPoliciesSettings.Value;
         }
 
         public object Create()
@@ -45,7 +43,6 @@ namespace Messaging
             Console.WriteLine("Creating a bus publisher for RabbitMQ");
 
             Dumper.Dump(_messagingSettings, nameof(_messagingSettings), Console.Out);
-            Dumper.Dump(_retryPoliciesSettings, nameof(_retryPoliciesSettings), Console.Out);
 
             return null;
         }

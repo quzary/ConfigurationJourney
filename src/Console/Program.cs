@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Lodgify.Consul.Options;
 using Lodgify.Consul.Options.Client;
@@ -31,19 +32,26 @@ namespace Console
                //.AddConsulConfiguration()
                .Build();
 
-            var builder = new ContainerBuilder();
+            try
+            {
+                var builder = new ContainerBuilder();
 
-            builder.ConfigureOptions<MessageBusSettings>(configurationRoot);
-            builder.ConfigureOptions<RetryPolicySettings>(configurationRoot);
+                builder.ConfigureOptions<MessageBusSettings>(configurationRoot);
+                builder.ConfigureOptions<RetryPolicySettings>(configurationRoot);
 
-            builder
-                .RegisterType<RabbitMqPublisherFactory>()
-                .As<IBusPublisherFactory>();
+                builder
+                    .RegisterType<RabbitMqPublisherFactory>()
+                    .As<IBusPublisherFactory>();
 
-            var container = builder.Build();
+                var container = builder.Build();
 
-            var rabbitMqPublisherFactory = container.Resolve<IBusPublisherFactory>();
-            rabbitMqPublisherFactory.Create();
+                var rabbitMqPublisherFactory = container.Resolve<IBusPublisherFactory>();
+                rabbitMqPublisherFactory.Create();
+            }
+            catch (Exception ex)
+            {
+                System.Console.Write(ex.GetDetails());
+            }
 
             System.Console.ReadKey();
         }
