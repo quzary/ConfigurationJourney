@@ -1,29 +1,40 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Lodgify.AppSettings;
+using Lodgify.Consul.Options;
+using Lodgify.Consul.Options.Client;
 using Lodgify.Ioc.Autofac.Options;
 using Messaging;
 using Microsoft.Extensions.Configuration;
 
 namespace Console
 {
+    public class ClientSettingsProvider : IClientSettingsProvider
+    {
+        public string Endpoint { get; } = "127.0.0.1";
+
+        public int Port { get; }
+
+        public string DataCenter { get; }
+
+        public string Token { get; }
+
+        public string ConfigurationPrefix { get; } = "local/web/";
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             var configurationRoot = new ConfigurationBuilder()
-                .AddAppSettingsConfiguration()
-                .AddInMemoryCollection(
-                    new List<KeyValuePair<string, string>>
-                    {
-                        new KeyValuePair<string, string>("config:messaging:errorQueueName", "__Lodgify_INMEMORY_Errors")
-                    }
-                )
-                .Build();
+               .AddConsulConfiguration(new ClientSettingsProvider())
+               // Default strategy getting settings from environment variables
+               //.AddConsulConfiguration()
+               .Build();
 
             var builder = new ContainerBuilder();
 
-            builder.ConfigureOptions<MessagingSettings>(configurationRoot);
+            builder.ConfigureOptions<MessageBusSettings>(configurationRoot);
+            builder.ConfigureOptions<RetryPolicySettings>(configurationRoot);
 
             builder
                 .RegisterType<RabbitMqPublisherFactory>()

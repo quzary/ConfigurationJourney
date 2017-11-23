@@ -35,11 +35,11 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Lodgify.AppSettings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lodgify.AppSettings.1.0.0-rc2\lib\net47\Lodgify.AppSettings.dll</HintPath>
+    <Reference Include="Consul, Version=0.7.2.3, Culture=neutral, PublicKeyToken=20a6ad9a81df1d95, processorArchitecture=MSIL">
+      <HintPath>..\packages\Consul.0.7.2.3\lib\net45\Consul.dll</HintPath>
     </Reference>
-    <Reference Include="Lodgify.Configuration.Contracts, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lodgify.Configuration.Contracts.1.1.0-rc2\lib\net47\Lodgify.Configuration.Contracts.dll</HintPath>
+    <Reference Include="Lodgify.Consul.Options, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lodgify.Consul.Options.1.1.0-rc2\lib\net47\Lodgify.Consul.Options.dll</HintPath>
     </Reference>
     <Reference Include="Lodgify.Extensions.Configuration, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lodgify.Extensions.Configuration.1.1.0-rc2\lib\net47\Lodgify.Extensions.Configuration.dll</HintPath>
